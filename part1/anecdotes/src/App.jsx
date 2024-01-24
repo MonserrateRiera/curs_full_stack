@@ -1,5 +1,35 @@
 import { useState } from 'react'
-import Anecdote from './Anecdote'
+
+
+
+const Button = ({handleClick, text}) =>{
+
+  return (
+    <button onClick={handleClick}>{text}</button>
+  );
+}
+
+const Anecdote = ({text, handleMethod}) => {
+
+  if(handleMethod!= null){
+    return(
+      <div>
+        <p>{text}</p>
+        <Button text={"vote"} handleClick={handleMethod}/>
+      </div>
+    );
+  }
+  return(
+    <div>
+      <h2>Most voted quote</h2>
+      <p>{text}</p>
+    </div>
+  );
+
+}
+
+
+
 
 const App = () => {
   const anecdotes = [
@@ -12,29 +42,36 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
 
   const [selected, setSelected] = useState(0)
-  const [best, setBest] = useState({max:0, text:0});
-
-  const randomQuoteIndex = () =>{
-    const min = 0;
+  const [max, setMax] = useState(0);
+  
+  const handleQuote = () =>{
     const max = anecdotes.length;
-    setSelected( Math.floor(Math.random() * (max - min + 1)) + min);
-  } 
-
-  const calculateBest = (votes, index)=>{
-    let sum = votes.reduce((a, b) => a + b, 0);
-    if(sum > best.max){
-      const newBest = {max: sum, text:index};
-      setBest(newBest);
-    }
+    const min = 0;
+    setSelected(Math.floor(Math.random() * (max - min) + min));
   }
-//Replantejar amb un boto aqui i l'array aqui.
+
+  const handleVote = () => {
+    console.log(votes)
+    const newVotes = [...votes];
+    newVotes[selected] += 1;
+    setVotes(newVotes);
+    calculateMax();
+  }
+
+  const calculateMax = () => {
+    let maxValue = Math.max(...votes);
+    let index = votes.indexOf(maxValue);
+    setMax(index);
+  }
+
   return (
     <div>
-      <Anecdote text = {anecdotes[selected]} handleBest={calculateBest} index={selected}/>
-      <p><button onClick={randomQuoteIndex}>Change Anectode!!</button></p>
-      <Anecdote text = {anecdotes[best.index]} handleBest={calculateBest} index={selected}/>
+      <Anecdote text ={anecdotes[selected]} handleMethod={handleVote} />
+      <Button text={'New Quote'} handleClick={handleQuote}></Button>
+      <Anecdote text ={anecdotes[max]}  />
     </div>
   )
 }
