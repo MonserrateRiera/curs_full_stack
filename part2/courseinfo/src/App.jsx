@@ -1,5 +1,5 @@
 
-import Content from './Content';
+import Course from './Course';
 const App = () => {
   
   const courses = [
@@ -50,7 +50,7 @@ const App = () => {
   return (
     <div>
       {courses.map(course=>
-        <Content course ={course} key={course.id}/>
+        <Course course ={course} key={course.id}/>
       )}
      
     </div>
