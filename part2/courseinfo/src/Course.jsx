@@ -2,7 +2,7 @@ import Part from "./Part";
 import Header from "./Header";
 import Total from "./Total";
 
-const Content = ({course}) =>{
+const Course = ({course}) =>{
   
     return (
         <div>
@@ -16,4 +16,4 @@ const Content = ({course}) =>{
     )
 }
 
-export default Content;
+export default Course;
