@@ -1,36 +1,19 @@
 import React, { useState } from 'react'
-
+import Form from './Form'
 const App = () => {
   const [ persons, setPersons ] = useState([
     { name: 'Arto Hellas' }
   ]) 
-  const [ newName, setNewName ] = useState('')
+  
 
-
-
-  const handleChange = (event) =>{
-    setNewName(event.target.value);
-  }
-
-  const addPerson = (event) =>{
-    event.preventDefault();
-    const newPerson = {name: newName};
+  const addPerson = (newPerson) =>{
     setPersons(persons.concat(newPerson));
-    setNewName('');
-    
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Form onSubmit={addPerson}  />
       <h2>Numbers</h2>
       {persons.map(person =>
         <p key={person.name}>{person.name}</p>
