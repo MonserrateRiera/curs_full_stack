@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Form from './Form'
+import PersonList from './PersonList'
 const App = () => {
   const [ persons, setPersons ] = useState([
     { name: 'Arto Hellas' }
@@ -15,9 +16,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Form onSubmit={addPerson}  />
       <h2>Numbers</h2>
-      {persons.map(person =>
-        <p key={person.name}>{person.name}</p>
-        )}
+      <PersonList persons={persons}/>
     </div>
   )
 }
