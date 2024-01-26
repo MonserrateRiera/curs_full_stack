@@ -1,3 +1,5 @@
+import PersonDetails from "./PersonDetails";
+
 const PersonList = ({persons}) => {
     if(persons.length === 0){
         return (
@@ -7,7 +9,7 @@ const PersonList = ({persons}) => {
     return(
         <>
             {persons.map(person =>
-                <p key={person.name}>{person.name}</p>
+                <PersonDetails key={person.name} name={person.name} number={person.number}/>
             )}
         </>
     )
