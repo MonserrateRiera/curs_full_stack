@@ -1,6 +1,7 @@
 import PersonDetails from "./PersonDetails";
 
 const PersonList = ({persons}) => {
+    console.log(persons);
     if(persons.length === 0){
         return (
             <h2>There isnt no numbers yet.</h2>
