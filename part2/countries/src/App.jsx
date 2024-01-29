@@ -1,33 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react'
+import Filter from './Filter'
+import axios from 'axios'
+import CountryList from './CountryList'
 
 function App() {
-  const [count, setCount] = useState(0)
+ 
+  const [filter, setFilter] = useState('')
+  const [countries, setCountries] = useState([])
+
+  useEffect(()=>{
+    axios
+    .get(`https://restcountries.com/v3.1/name/${filter}`)
+    .then(response =>{
+      setCountries(response.data)
+      console.log(response.data)
+    })
+    .catch(error => {
+      console.log("Error, there aren't any countries with that name")
+    })
+
+  }, [filter])
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+    console.log(filter);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+     <Filter handleFilterChange={handleFilterChange}/>
+     <CountryList countries={countries}/>
     </>
   )
 }
