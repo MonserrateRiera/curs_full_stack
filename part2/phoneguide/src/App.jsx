@@ -5,12 +5,12 @@ import Filter from './Filter'
 import Services from './Services/Services'
 import Notification from './Notification'
 
-//TODO add styles
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [message, setMessage] = useState(null);
   const [clasname, setClasname] = useState('');
+
   useEffect(() => {
     console.log('effect')
     const data = Services.getAll();
@@ -25,6 +25,7 @@ const App = () => {
       .then(data => setPersons(persons.concat(data)))
       setMessage("user created correctly");
       setClasname('notification');
+      setTimeout(() => {setMessage(null)}, 5000)
     }
     else{
       confirmUpdate(newPerson);
@@ -54,6 +55,7 @@ const App = () => {
     .catch(error =>{
       setMessage("There's an Error!");
       setClasname('error');
+      setTimeout(() => {setMessage(null)}, 5000)
     })
     
     
