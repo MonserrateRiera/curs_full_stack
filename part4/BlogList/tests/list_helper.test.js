@@ -89,6 +89,11 @@ describe('Managing likes test', () => {
         const result = listHelper.favoriteBlog(blogs)
         console.log(result);
         expect(result).toEqual(blogs[2])
+      })
+      test('Most fructific author', () =>{
+        const result = listHelper.mostBlogs(blogs);
+        console.log(result);
+        expect(result).toBe("Robert C. Martin");
       })    
 })
 
