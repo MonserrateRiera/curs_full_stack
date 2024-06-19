@@ -1,27 +1,27 @@
-const entriesRouter = require ('express').Router();
+const entriesRouter = require('express').Router();
 const Entry = require('../models/Entry');
 
 entriesRouter.get('/', (request, response) => {
-    Entry.find({})
-        .then((entries) => {
-        response.json(entries);
-        });
+  Entry.find({})
+    .then((entries) => {
+      response.json(entries);
+    });
 });
 entriesRouter.get('/:id',(request, response, next)=>{
-    Entry.findById(request.params.id)
-      .then((person) => {
-        person ? response.json(person) : response.status(404).end();
-      })
-      .catch((error) => next(error));
-  });
+  Entry.findById(request.params.id)
+    .then((person) => {
+      person ? response.json(person) : response.status(404).end();
+    })
+    .catch((error) => next(error));
+});
   
-  entriesRouter.delete('/:id', (request, response, next) => {
-    Entry.findByIdAndDelete(request.params.id)
-      .then((result) => {
-        response.status(204).end
-      })
-      .catch((error) => next(error));
-  });
+entriesRouter.delete('/:id', (request, response, next) => {
+  Entry.findByIdAndDelete(request.params.id)
+    .then((result) => {
+      response.status(204).end
+    })
+    .catch((error) => next(error));
+});
   
   entriesRouter.put('/:id', (request, response, next) => {
     const { name, phoneNumber } = request.body;

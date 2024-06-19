@@ -4,9 +4,15 @@
   "description": "The backend for a blog list app",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "NODE_ENV=test jest --verbose --runInBand",
     "start": "NODE_ENV=production node index.js",    
     "dev": "NODE_ENV=development nodemon index.js"
+=======
+    "test": "jest --verbose",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+>>>>>>> origin/main
   },
   "author": "Monx",
   "license": "ISC",
