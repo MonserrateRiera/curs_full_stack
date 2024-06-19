@@ -51,8 +51,19 @@ describe('Group of tests trying the api', () => {
         const response = await api.get('/api/blogs/');
         expect(response.body[0].id).toBeDefined();
     })
+    test('should add a new blog', async () => {
+        const newBlog = {
+            title: 'Blog testing 4',
+            author: 'Joan',
+            url: 'testing4Joan.com',
+            likes: 4 
+        };
+        //He de de fer un post amb el blog nou
+        await api.post('/api/blogs/').send(newBlog);
+        const response = await api.get('/api/blogs/')
+        expect(response.body).toHaveLength(inicialBlogs.length + 1);
 });
-
+});
 
 afterAll(() => {
     mongoose.connection.close()
