@@ -47,6 +47,10 @@ describe('Group of tests trying the api', () => {
         console.log('response of the database ',response.body);
         expect(response.body).toHaveLength(inicialBlogs.length);
     });
+    test('should return the id like id and not _id', async () => {
+        const response = await api.get('/api/blogs/');
+        expect(response.body[0].id).toBeDefined();
+    })
 });
 
 
