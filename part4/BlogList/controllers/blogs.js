@@ -28,7 +28,7 @@ blogsRouter.post('/', async (request, response) => {
     //   })
     //   .catch((error) => next(error));
 })
-//Eliminam un blog. Com que desconeixem la id ho fare per el nom
+//Eliminam un blog. 
 blogsRouter.delete('/:id', async (request, response) => {
   console.log('request : '+ request.params.id);
   const id = request.params.id;
@@ -37,6 +37,21 @@ blogsRouter.delete('/:id', async (request, response) => {
     response.send(204).end;
   }else{
     response.send(404).end;
+  }
+})
+
+blogsRouter.put('/:id', async (request, response) => {
+  const updatedBlog = {
+    title: request.body.title,
+    author: request.body.author,
+    url: request.body.url,
+    likes: request.body.likes
+  }
+  const result = await Blog.findByIdAndUpdate(request.params.id, updatedBlog, { new: true });
+  if(result){
+    response.json(result);
+  }else{
+    response.status(400);
   }
 })
 
