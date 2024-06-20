@@ -11,7 +11,7 @@ usersRouter.post('/', async (request, response) => {
 
     const saltRounds = 10;
     //Encriptam el password i desam el hash
-    const passwordHash = await bcrypt(password, saltRounds);
+    const passwordHash = await bcrypt.hash(password, saltRounds)
 
     const user = new User({
         username,
