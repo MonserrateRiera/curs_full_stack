@@ -43,10 +43,11 @@ describe ('API tests, POSTing blogs', () => {
             url: 'testing4Joan.com',
             likes: 4 
         };
-        //He de de fer un post amb el blog nou
+
         await api.post('/api/blogs/').send(newBlog);
         const response = await api.get('/api/blogs/');
-        expect(response.body).toHaveLength(inicialBlogs.length + 1);
+        //Es comprova que la resposta de obtenir tots els post es la original més 1.
+        expect(response.body).toHaveLength(helper.inicialBlogs.length + 1);
     });
     
     test('should add a new blog with likes 0 if likes are not defined', async()=> {
@@ -60,6 +61,7 @@ describe ('API tests, POSTing blogs', () => {
         //Comprovam si els likes del darrer valor introduït val 0 (el que hem introduit sense valor like.)
         expect(response.body[response.body.length -1].likes).toBe(0)
     });
+    
     test('should receive a 400 bad request if title or url is missing', async () => {
         const newBlog = {
             author: 'testing',
