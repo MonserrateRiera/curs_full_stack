@@ -40,7 +40,7 @@ beforeEach(async () =>{
     await blogObject.save();
 })
 
-describe('Group of tests trying the api', () => {
+describe('API test, getting blogs', () => {
 
     test('should return the number of blogs from the api',  async () => {
         const response = await api.get('/api/blogs/');
@@ -51,6 +51,9 @@ describe('Group of tests trying the api', () => {
         const response = await api.get('/api/blogs/');
         expect(response.body[0].id).toBeDefined();
     })
+});
+
+describe ('API tests, POSTing blogs', () => {
     test('should add a new blog', async () => {
         const newBlog = {
             title: 'Blog testing 4',
@@ -63,6 +66,7 @@ describe('Group of tests trying the api', () => {
         const response = await api.get('/api/blogs/');
         expect(response.body).toHaveLength(inicialBlogs.length + 1);
     });
+    
     test('should add a new blog with likes 0 if likes are not defined', async()=> {
         const newBlog ={
             title: 'Blog testing without likes',
@@ -80,12 +84,37 @@ describe('Group of tests trying the api', () => {
             url: 'testing5',
             likes: 4
         };
-        
+
         await api
             .post("/api/blogs/")
             .send(newBlog)
             .expect(400);
 
+    });
+});
+
+describe("API test, DELETEing blogs", () => {
+    test('should return code 204 deleting an existing blog', async () => {
+        const response = (await api.get('/api/blogs/'));
+        const id = response.body[response.body.length -1].id;
+        console.log(id);
+        await api
+            .delete(`/api/blogs/${id}`)
+            .expect(204);
+    });
+
+    test('should return code 404 if id not exists', async () => {
+        const id = "65d77bf27d26a6f40cf58053"
+        await api
+            .delete(`/api/blogs/${id}`)
+            .expect(404);
+    });
+
+    test('should return 400 if id isnt well formed', async () => {
+        const id = "sda2123"
+        await api
+            .delete(`/api/blogs/${id}`)
+            .expect(400);
     });
 });
 

@@ -28,6 +28,16 @@ blogsRouter.post('/', async (request, response) => {
     //   })
     //   .catch((error) => next(error));
 })
+//Eliminam un blog. Com que desconeixem la id ho fare per el nom
+blogsRouter.delete('/:id', async (request, response) => {
+  console.log('request : '+ request.params.id);
+  const id = request.params.id;
+  const result = await Blog.findByIdAndDelete(id);
+  if(result){
+    response.send(204).end;
+  }else{
+    response.send(404).end;
+  }
+})
 
-blogsRouter.delete('/:id')
 module.exports = blogsRouter;
