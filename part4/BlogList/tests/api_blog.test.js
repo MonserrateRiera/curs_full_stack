@@ -60,9 +60,33 @@ describe('Group of tests trying the api', () => {
         };
         //He de de fer un post amb el blog nou
         await api.post('/api/blogs/').send(newBlog);
-        const response = await api.get('/api/blogs/')
+        const response = await api.get('/api/blogs/');
         expect(response.body).toHaveLength(inicialBlogs.length + 1);
-});
+    });
+    test('should add a new blog with likes 0 if likes are not defined', async()=> {
+        const newBlog ={
+            title: 'Blog testing without likes',
+            author: 'testing',
+            url: 'testing5'
+        };
+        await api.post("/api/blogs/").send(newBlog);
+        const response = await api.get('/api/blogs/');
+        //Comprovam si els likes del darrer valor introduït val 0 (el que hem introduit sense valor like.)
+        expect(response.body[response.body.length -1].likes).toBe(0)
+    });
+    test('should receive a 400 bad request if title or url is missing', async () => {
+        const newBlog = {
+            author: 'testing',
+            url: 'testing5',
+            likes: 4
+        };
+        
+        await api
+            .post("/api/blogs/")
+            .send(newBlog)
+            .expect(400);
+
+    });
 });
 
 afterAll(() => {
