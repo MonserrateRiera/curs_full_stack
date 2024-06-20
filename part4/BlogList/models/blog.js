@@ -13,7 +13,11 @@ const blogSchema = new mongoose.Schema({
     likes: {
       type: Number,
       default: 0
-    }
+    },
+
+    //Afegim id de l'user que ha l'ha creat.
+    
+    user: {    type: mongoose.Schema.Types.ObjectId,    ref: 'User'  }
   })
 
   blogSchema.set('toJSON', {
