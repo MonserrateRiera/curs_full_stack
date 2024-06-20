@@ -22,7 +22,7 @@ beforeEach(async () =>{
     await blogObject.save();
 })
 
-describe('API test, getting blogs', () => {
+describe('API test, GETing blogs', () => {
 
     test('should return the number of blogs from the api',  async () => {
         const response = await api.get('/api/blogs/');
@@ -37,48 +37,35 @@ describe('API test, getting blogs', () => {
 
 describe ('API tests, POSTing blogs', () => {
     test('should add a new blog', async () => {
-        const newBlog = {
-            title: 'Blog testing 4',
-            author: 'Joan',
-            url: 'testing4Joan.com',
-            likes: 4 
-        };
+        
 
-        await api.post('/api/blogs/').send(newBlog);
+        await api.post('/api/blogs/').send(helper.newBlog);
         const response = await api.get('/api/blogs/');
         //Es comprova que la resposta de obtenir tots els post es la original més 1.
         expect(response.body).toHaveLength(helper.inicialBlogs.length + 1);
     });
     
     test('should add a new blog with likes 0 if likes are not defined', async()=> {
-        const newBlog ={
-            title: 'Blog testing without likes',
-            author: 'testing',
-            url: 'testing5'
-        };
-        await api.post("/api/blogs/").send(newBlog);
+       
+        await api.post("/api/blogs/").send(helper.blogNoLikes);
         const response = await api.get('/api/blogs/');
         //Comprovam si els likes del darrer valor introduït val 0 (el que hem introduit sense valor like.)
         expect(response.body[response.body.length -1].likes).toBe(0)
     });
     
     test('should receive a 400 bad request if title or url is missing', async () => {
-        const newBlog = {
-            author: 'testing',
-            url: 'testing5',
-            likes: 4
-        };
 
         await api
             .post("/api/blogs/")
-            .send(newBlog)
+            .send(helper.blogNoUrl)
             .expect(400);
 
     });
 });
 
-describe("API test, DELETEing blogs", () => {
+describe("API tests, DELETEing blogs", () => {
     test('should return code 204 deleting an existing blog', async () => {
+
         const response = (await api.get('/api/blogs/'));
         const id = response.body[response.body.length -1].id;
         console.log(id);
@@ -99,6 +86,25 @@ describe("API test, DELETEing blogs", () => {
         await api
             .delete(`/api/blogs/${id}`)
             .expect(400);
+    });
+});
+
+describe('API tests UPDATING blogs', () => {
+    test('should return updating blog', async () => {
+        const response = (await api.get('/api/blogs/'));
+        const id = response.body[response.body.length -1].id;
+
+        const updatingBlog = {
+            title: 'Updating Blog testing',
+            author: 'Test Updating',
+            url: 'testUpdating.com',
+            likes: 4
+        }
+        console.log(id);
+        const result = await api
+            .put(`/api/blogs/${id}`)
+            .send (updatingBlog);
+        expect(result.body.title).toContain("Updating")    
     });
 });
 
