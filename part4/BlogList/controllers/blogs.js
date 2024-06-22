@@ -1,6 +1,7 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
 const { error } = require('../utils/logger');
+const User = require('../models/user')
 
 //Mostrar tots els blogs
 blogsRouter.get('/', async (request, response) => {
@@ -18,15 +19,24 @@ blogsRouter.get('/', async (request, response) => {
   })
   //Postear un blog nou
 blogsRouter.post('/', async (request, response) => {
-    const blog = new Blog(request.body)
+
+  //Afegim el contingut a la variable body i cercam l'usuari que serà el creador de la nota.
+    const body = request.body
+    const user = await User.findById(body.userId)
+//Cream un nou objecte blog, amb les dades rebudes
+    const blog = new Blog({
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes,
+      user: user.id
+    })
+    //Desam el blog i amb la resposta afegim la id del blog a l'usuari i desam l'usuari..
     const savedBlog = await blog.save();
+    user.blogs = user.blogs.concat(savedBlog._id);
+    await user.save();
     response.status(201).json(savedBlog);
-    // blog
-    //   .save()
-    //   .then(result => {
-    //     response.status(201).json(result)
-    //   })
-    //   .catch((error) => next(error));
+
 })
 //Eliminam un blog. 
 blogsRouter.delete('/:id', async (request, response) => {
