@@ -22,7 +22,7 @@ beforeEach(async () =>{
     await blogObject.save();
 })
 
-describe('API test, GETing blogs', () => {
+describe('API BLOG test, GET', () => {
 
     test('should return the number of blogs from the api',  async () => {
         const response = await api.get('/api/blogs/');
@@ -35,7 +35,7 @@ describe('API test, GETing blogs', () => {
     })
 });
 
-describe ('API tests, POSTing blogs', () => {
+describe ('API BLOG test, POST', () => {
     test('should add a new blog', async () => {
         
 
@@ -63,7 +63,7 @@ describe ('API tests, POSTing blogs', () => {
     });
 });
 
-describe("API tests, DELETEing blogs", () => {
+describe("API BLOG test, DELETE", () => {
     test('should return code 204 deleting an existing blog', async () => {
 
         const response = (await api.get('/api/blogs/'));
@@ -89,7 +89,7 @@ describe("API tests, DELETEing blogs", () => {
     });
 });
 
-describe('API tests UPDATING blogs', () => {
+describe('API BLOG test, UPDATE', () => {
     test('should return updating blog', async () => {
         const response = (await api.get('/api/blogs/'));
         const id = response.body[response.body.length -1].id;

@@ -4,7 +4,11 @@ const mongoose = require ('mongoose');
 // cream esquema d'usuari
 
 const userSchema = new mongoose.Schema({
-    username: String,
+    username: {    
+        type: String,    
+        required: true,    
+        unique: true  
+    },
     name: String,
     passwordHash: String,
 
