@@ -5,7 +5,7 @@ const User = require('../models/user')
 
 //Mostrar tots els blogs
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate('user', {username:1, name:1});
     if(blogs){
       response.json(blogs);
     }else{
@@ -22,6 +22,7 @@ blogsRouter.post('/', async (request, response) => {
 
   //Afegim el contingut a la variable body i cercam l'usuari que serà el creador de la nota.
     const body = request.body
+    console.log(body);
     const user = await User.findById(body.userId)
 //Cream un nou objecte blog, amb les dades rebudes
     const blog = new Blog({
