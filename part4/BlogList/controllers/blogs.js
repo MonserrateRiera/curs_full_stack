@@ -2,6 +2,19 @@ const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
 const { error } = require('../utils/logger');
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+//Metode per extreure el token de la petició
+
+// const getTokenFrom = request => {
+//     const authorization = request.get('authorization')  
+//     if (authorization && authorization.startsWith('Bearer ')) {   
+//        return authorization.replace('Bearer ', '')  
+//       }  
+//     return null
+//   }
+
+
 
 //Mostrar tots els blogs
 blogsRouter.get('/', async (request, response) => {
@@ -11,19 +24,22 @@ blogsRouter.get('/', async (request, response) => {
     }else{
       response.status(404);
     }
-    // Blog
-    //   .find({})
-    //   .then(blogs => {
-    //     response.json(blogs)
-    //   })
+
   })
-  //Postear un blog nou
+
+  //Postear un blog nou sempre i quant sigui un usuari autenticat.
 blogsRouter.post('/', async (request, response) => {
 
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {    
+    return response.status(401).json({ 
+      error: 'token invalid' })  
+    }  
+    const user = await User.findById(decodedToken.id)
   //Afegim el contingut a la variable body i cercam l'usuari que serà el creador de la nota.
     const body = request.body
     console.log(body);
-    const user = await User.findById(body.userId)
+
 //Cream un nou objecte blog, amb les dades rebudes
     const blog = new Blog({
       title: body.title,
