@@ -57,14 +57,34 @@ blogsRouter.post('/', async (request, response) => {
 })
 //Eliminam un blog. 
 blogsRouter.delete('/:id', async (request, response) => {
+
+  //comprovam si esta logueat amb un token
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {    
+    return response.status(401).json({ 
+      error: 'token invalid' })  
+    }  
+    
   console.log('request : '+ request.params.id);
   const id = request.params.id;
-  const result = await Blog.findByIdAndDelete(id);
-  if(result){
-    response.send(204).end;
+  const blog = await Blog.findById(id);
+  console.log("blog" , blog);
+  console.log("token ", decodedToken);
+  //comprovam si l'usuari es el mateix que ha donat el blog d'alta
+  if ( blog.user.toString() === decodedToken.id.toString() ){
+    const result = await Blog.findByIdAndDelete(id);
+    if(result){
+      response.send(204).end;
+    }else{
+      response.send(404).end;
+    }
   }else{
-    response.send(404).end;
-  }
+    response.status(403).json({
+      error: 'incorrect user'
+    })
+  }  
+
+  
 })
 
 blogsRouter.put('/:id', async (request, response) => {

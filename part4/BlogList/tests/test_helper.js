@@ -1,3 +1,4 @@
+const blog = require('../models/blog');
 const Blog = require ('../models/blog');
 
 const inicialBlogs = [
@@ -20,11 +21,16 @@ const inicialBlogs = [
         likes: 4
     }
 ];
-const newBlog = {
-    title: 'Blog testing 4',
-    author: 'Joan',
-    url: 'testing4Joan.com',
-    likes: 4 
+const newBlog = (userId) => {
+    let blog = {
+        title: 'Blog testing 4',
+        author: 'Joan',
+        url: 'testing4Joan.com',
+        likes: 4,
+        user: userId
+        }
+
+    return blog;
 };
 
 const blogNoLikes ={
