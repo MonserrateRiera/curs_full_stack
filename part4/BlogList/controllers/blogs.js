@@ -73,6 +73,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   //comprovam si l'usuari es el mateix que ha donat el blog d'alta
   if ( blog.user.toString() === decodedToken.id.toString() ){
     const result = await Blog.findByIdAndDelete(id);
+    console.log('resposta find and delete', result);
     if(result){
       response.send(204).end;
     }else{

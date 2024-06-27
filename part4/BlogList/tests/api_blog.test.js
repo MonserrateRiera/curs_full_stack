@@ -28,6 +28,20 @@ beforeEach(async () =>{
     console.log('creant usuari ',userObject)
     await userObject.save();
 })
+const generateToken = async (id) =>{
+    const user1 = await User.findById(id);
+    //cream un tokem amb la informació de l'usuari per poder autenticar-no per crear el blog.
+    const userForToken = {
+        username: user1.username,
+        id: user1._id
+    }
+    const token = jwt.sign(    
+        userForToken,     
+        process.env.SECRET,    
+        { expiresIn: 60*60 }
+    )
+    return token;
+}
 
 describe('API BLOG test, GET', () => {
 
@@ -49,46 +63,41 @@ describe ('API BLOG test, POST', () => {
         console.log('usuari ', user1);
         await api.post('/api/blogs/').send(helper.newBlog(user1._id)).expect(401);
     });
+    
 
     test('should create a new Blog', async ()  => {
         //obtenim l'usuari que tenim a la base de dades.
-
-        const user1 = await User.findById(userObject.id);
-        //cream un tokem amb la informació de l'usuari per poder autenticar-no per crear el blog.
-        const userForToken = {
-            username: user1.username,
-            id: user1._id
-        }
-        const token = jwt.sign(    
-            userForToken,     
-            process.env.SECRET,    
-            { expiresIn: 60*60 }
-        )
+        const token = await generateToken(userObject.id);
         //ara ja si, feim la petició amb un nou blog i el token.
-        const newBlog = helper.newBlog(user1._id);
+        const newBlog = helper.newBlog(userObject.id);
         console.log(newBlog);
+
         await api.post('/api/blogs/')
         .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201);
         
     });
-    // test('should add a new blog with likes 0 if likes are not defined', async()=> {
-       
-    //     await api.post("/api/blogs/").send(helper.blogNoLikes);
-    //     const response = await api.get('/api/blogs/');
-    //     //Comprovam si els likes del darrer valor introduït val 0 (el que hem introduit sense valor like.)
-    //     expect(response.body[response.body.length -1].likes).toBe(0)
-    // });
+    test('should add a new blog with likes 0 if likes are not defined', async()=> {
+        //generam token
+        const token = await generateToken(userObject.id);
+        //Afegim el token
+        await api.post("/api/blogs/")
+        .set('Authorization', `Bearer ${token}`)
+        .send(helper.blogNoLikes);
+        const response = await api.get('/api/blogs/');
+        //Comprovam si els likes del darrer valor introduït val 0 (el que hem introduit sense valor like.)
+        expect(response.body[response.body.length -1].likes).toBe(0)
+    });
     
-    // test('should receive a 400 bad request if title or url is missing', async () => {
-
-    //     await api
-    //         .post("/api/blogs/")
-    //         .send(helper.blogNoUrl)
-    //         .expect(400);
-
-    // });
+    test('should receive a 400 bad request if title or url is missing', async () => {
+        const token = await generateToken(userObject.id);
+        await api
+            .post("/api/blogs/")
+            .set('Authorization', `Bearer ${token}`)
+            .send(helper.blogNoUrl)
+            .expect(400);
+    });
 });
 
 describe("API BLOG test, DELETE", () => {
@@ -103,38 +112,45 @@ describe("API BLOG test, DELETE", () => {
     });
 
     // test('should return code 404 if id not exists', async () => {
+    //     const token = await generateToken(userObject.id);
     //     const id = "65d77bf27d26a6f40cf58053"
     //     await api
     //         .delete(`/api/blogs/${id}`)
+    //         .set('Authorization', `Bearer ${token}`)
     //         .expect(404);
     // });
 
-    // test('should return 400 if id isnt well formed', async () => {
-    //     const id = "sda2123"
-    //     await api
-    //         .delete(`/api/blogs/${id}`)
-    //         .expect(400);
-    // });
+    test('should return 400 if id isnt well formed', async () => {
+        const token = await generateToken(userObject.id);
+        const id = "asdas223"
+        await api
+            .delete(`/api/blogs/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(400);
+    });
 });
 
-// describe('API BLOG test, UPDATE', () => {
-//     test('should return updating blog', async () => {
-//         const response = (await api.get('/api/blogs/'));
-//         const id = response.body[response.body.length -1].id;
+describe('API BLOG test, UPDATE', () => {
+    test('should return updating blog', async () => {
+        const token = await generateToken(userObject.id);
+        const response = (await api.get('/api/blogs/'));
+        const id = response.body[response.body.length -1].id;
 
-//         const updatingBlog = {
-//             title: 'Updating Blog testing',
-//             author: 'Test Updating',
-//             url: 'testUpdating.com',
-//             likes: 4
-//         }
-//         console.log(id);
-//         const result = await api
-//             .put(`/api/blogs/${id}`)
-//             .send (updatingBlog);
-//         expect(result.body.title).toContain("Updating")    
-//     });
-// });
+        const updatingBlog = {
+            title: 'Updating Blog testing',
+            author: 'Test Updating',
+            url: 'testUpdating.com',
+            likes: 4,
+            user: userObject.id
+        }
+        console.log(id);
+        const result = await api
+            .put(`/api/blogs/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send (updatingBlog);
+        expect(result.body.title).toContain("Updating")    
+    });
+});
 
 afterAll(() => {
     mongoose.connection.close()

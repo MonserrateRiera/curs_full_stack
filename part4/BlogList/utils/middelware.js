@@ -1,5 +1,6 @@
 const logger = require('./logger')
 const jwt = require('jsonwebtoken')
+const User = require('../models/user');
 
 
 const requestLogger = (request, response, next) => {
@@ -17,7 +18,21 @@ const tokenExtractor = (request, response, next) => {
       }  
   next()
 }
-
+const userExtractor =  (request, response, next) => {
+  const user = {
+    username :request.token.username, 
+    id: request.token.id
+  };
+  
+  if (user.username && user.id) {
+    console.log("userExtractor: ",user)
+    request.user = user;
+    next();
+  } else {
+    // Enviar una respuesta de error si no se encuentra el usuario
+    response.status(401).json({ error: 'User not found in token' });
+  }
+}
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
@@ -37,6 +52,8 @@ const errorHandler = (error, request, response, next) => {
     return response.status(401).json({ error: 'token expired'})  
   }else if (error.name === 'ForbiddenError') {    
     return response.status(401).json({ error: 'access denied'})  
+  }else if (error.name ==='NotFound'){
+    return response.status(404).json({error: 'resource not found'})
   }
   next(error)
 }
@@ -45,5 +62,6 @@ module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  tokenExtractor
+  tokenExtractor,
+  userExtractor
 }
