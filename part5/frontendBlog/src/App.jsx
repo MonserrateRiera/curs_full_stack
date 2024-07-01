@@ -51,10 +51,14 @@ const logoutHandler = () =>{
   window.localStorage.removeItem('loggedBlogappUser')
   setUser(null);
 }
-const createHandler = (newBlog) => {
+const createHandler = async (newBlog) => {
   //Cridam a la validació
   if(helpers.validateBlog(newBlog)){
+
     console.log("Blog valid ", newBlog);
+    console.log("token", user)
+    const resposta = await blogService.createBlog(newBlog, user);
+    console.log(resposta);
   }else{
     console.log("Blog no valid")
   }
