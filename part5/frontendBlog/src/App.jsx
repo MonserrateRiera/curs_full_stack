@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 import './App.css'
 import FormLogin from './Components/FormLogin'
+import CreateBlogForm from './Components/CreateBlogForm'
 import loginService from './Services/loginService'
 import helpers from './helpers/helpers'
 import blogService from './Services/blogService'
@@ -50,12 +51,21 @@ const logoutHandler = () =>{
   window.localStorage.removeItem('loggedBlogappUser')
   setUser(null);
 }
+const createHandler = () => {
 
+}
 
   return (
     <>
       {
-        user ? <h3>Welcome back {user.name} <button onClick={logoutHandler}>Logout</button></h3>
+        user ?( 
+          <div>
+            <div>
+              <h3>Welcome back {user.name} <button onClick={logoutHandler}>Logout</button></h3>
+            </div>
+            <CreateBlogForm />
+          </div>
+        )
         : <FormLogin onSubmit={loginHandler} />
       }
       <h1>Llistat de blogs aqui</h1>
