@@ -14,6 +14,19 @@ const validatePassword = (password) => {
     return false;
 }
 
+const validateBlog = (Blog) =>{
+    if(validateBlogPart(Blog.title) && validateBlogPart(Blog.url) && validateBlogPart(Blog.author)){
+        return true;
+    }
+    return false;
+}
+
+const validateBlogPart = (part) => {
+    if(part && part.length>3){
+        return true;
+    }
+    return false;
+}
 
 
-export default {validateName, validatePassword}
+export default {validateName, validatePassword, validateBlog}

@@ -51,8 +51,13 @@ const logoutHandler = () =>{
   window.localStorage.removeItem('loggedBlogappUser')
   setUser(null);
 }
-const createHandler = () => {
-
+const createHandler = (newBlog) => {
+  //Cridam a la validació
+  if(helpers.validateBlog(newBlog)){
+    console.log("Blog valid ", newBlog);
+  }else{
+    console.log("Blog no valid")
+  }
 }
 
   return (
@@ -63,7 +68,7 @@ const createHandler = () => {
             <div>
               <h3>Welcome back {user.name} <button onClick={logoutHandler}>Logout</button></h3>
             </div>
-            <CreateBlogForm />
+            <CreateBlogForm onSubmit={createHandler} />
           </div>
         )
         : <FormLogin onSubmit={loginHandler} />
