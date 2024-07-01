@@ -25,8 +25,9 @@ useEffect(() => {
   fetchBlogs();
 }, []);
 
+//Hook que serveix per agafar es token de s'emmagrzament local i l'assigna a l'user.
 useEffect(() => {    
-  const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')    
+  const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')    
   if (loggedUserJSON) {      
     const user = JSON.parse(loggedUserJSON)      
     setUser(user)      
