@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef  } from 'react'
 
 import './App.css'
 import FormLogin from './Components/FormLogin'
@@ -6,10 +6,12 @@ import CreateBlogForm from './Components/CreateBlogForm'
 import loginService from './Services/loginService'
 import helpers from './helpers/helpers'
 import blogService from './Services/blogService'
+import Togglable from './Components/Toggable'
 
 function App() {
 const [user, setUser] = useState(null)
 const [blogs, setBlogs] = useState([]);
+const blogFormRef = useRef();
 
 //Hook que s'executa quant es carrega la primera vegada, agafant tots es blogs que hi ha i les carrega a l'estat blogs.
 useEffect(() => {
@@ -57,6 +59,7 @@ const createHandler = async (newBlog) => {
     const resposta = await blogService.createBlog(newBlog, user);
     console.log(resposta);
     setBlogs(blogs.concat(resposta));
+    blogFormRef.current.toggleVisibility()
   }else{
     console.log("Blog no valid")
   }
@@ -70,7 +73,9 @@ const createHandler = async (newBlog) => {
             <div>
               <h3>Welcome back {user.name} <button onClick={logoutHandler}>Logout</button></h3>
             </div>
-            <CreateBlogForm onSubmit={createHandler} />
+            <Togglable buttonLabel="New Blog" ref={ blogFormRef }>
+              <CreateBlogForm onSubmit={createHandler} />
+            </Togglable>
           </div>
         )
         : <FormLogin onSubmit={loginHandler} />
