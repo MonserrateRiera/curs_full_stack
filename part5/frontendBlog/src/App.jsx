@@ -7,6 +7,7 @@ import loginService from './Services/loginService'
 import helpers from './helpers/helpers'
 import blogService from './Services/blogService'
 import Togglable from './Components/Toggable'
+import Blog from './Components/Blog'
 
 function App() {
 const [user, setUser] = useState(null)
@@ -73,7 +74,7 @@ const createHandler = async (newBlog) => {
             <div>
               <h3>Welcome back {user.name} <button onClick={logoutHandler}>Logout</button></h3>
             </div>
-            <Togglable buttonLabel="New Blog" ref={ blogFormRef }>
+            <Togglable buttonLabel="Nuevo Blog" ref={ blogFormRef } cancelButton="Cancelar">
               <CreateBlogForm onSubmit={createHandler} />
             </Togglable>
           </div>
@@ -83,7 +84,7 @@ const createHandler = async (newBlog) => {
       <h1>Llistat de blogs aqui</h1>
       {
         blogs ? blogs.map(blog => (
-          <p key={blog.id}>{blog.title}</p>
+          <Blog key={blog.id} id={blog.id} title={blog.title} author={blog.author} url={blog.url} likes={blog.likes} />
         ))
         :<h4>Theres no blogs to show</h4>
       }
