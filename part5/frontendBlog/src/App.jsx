@@ -85,13 +85,15 @@ const likeHandler = async( updatedBlog ) =>{
   );
 }
 const deleteHandler = async ( deleteBlog ) =>{
-  
-  if(deleteBlog.user.username === user.username){
-    const response  = await blogService.removeBlog( deleteBlog.id, user);
-    setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== deleteBlog.id));
-  }else{
-    console.log("No pots borrar lo que no es teu!!!")
+  if(window.confirm("De verdad quieres borrarlo?")){
+    if(deleteBlog.user.username === user.username){
+      const response  = await blogService.removeBlog( deleteBlog.id, user);
+      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== deleteBlog.id));
+    }else{
+      console.log("No pots borrar lo que no es teu!!!")
+    }
   }
+  
 }
 
   return (
