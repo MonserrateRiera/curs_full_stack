@@ -1,5 +1,6 @@
 //formulari per fer login
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const FormLogin = ({onSubmit}) =>{
     //declaram els useState per gestionar password i username
@@ -40,3 +41,7 @@ const FormLogin = ({onSubmit}) =>{
 } 
 
 export default FormLogin;
+
+FormLogin.propTypes = {
+    onSubmit: PropTypes.func.isRequired
+  }
