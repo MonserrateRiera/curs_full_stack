@@ -19,14 +19,16 @@ const createBlog = async (newBlog, token) => {
         return request.data;
     }
 }
-/**
- * 
- * @param {*} id 
- * @returns 
- * Afegit aquest metodo. A nes backend s'ha de fer un put nombes amb so id per actualizar es likes
- */
-const addLike = async (id) => {
-    const request = await axios.put(`URL/${id}`);
+
+
+const addLike = async ( blog ) => {
+    console.log(`URL/${blog.id}`)
+    const request = await axios.put( `${URL}/${blog.id}`, {
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes
+    });
     if(request){
         return request.data;
     }

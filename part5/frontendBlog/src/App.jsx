@@ -65,9 +65,17 @@ const createHandler = async (newBlog) => {
     console.log("Blog no valid")
   }
 }
+/**
+ * Encara que no sigui lo seu, gestionaré s'increment des like desde aqui, s'enviarà
+ * es contingut modificat des blog a nes metode update i es modificará.
+ * @param {*} blog 
+ */
 const likeHandler = async( blog ) =>{
+  console.log("Aquest es es blog que he de moficiar: ",blog)
+  blog.likes = blog.likes+1;
+  console.log("Aquest es es blog que he modificat: ",blog)
 
-  const response  = await blogService.addLike( blog.id );
+  const response  = await blogService.addLike( blog );
 }
 
 

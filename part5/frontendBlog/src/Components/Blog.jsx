@@ -21,7 +21,7 @@ export const Blog = ({id, title, author, url, likes, user, onLikeClick }) => {
         <Togglable buttonLabel="View" cancelButton="Hide">
             <p>Autor: { author }</p>
             <p>Direccion web: <a href={{ url }}> Direccion web</a></p>
-            <p>Numero de likes: {likes} <button>Like!</button></p>
+            <p>Numero de likes: {likes} <button onClick={likeHandler}>Like!</button></p>
         </Togglable>
         
     </div>
