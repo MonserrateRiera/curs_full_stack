@@ -22,7 +22,7 @@ const createBlog = async (newBlog, token) => {
 
 
 const addLike = async ( blog ) => {
-    console.log(`URL/${blog.id}`)
+    //console.log(`URL/${blog.id}`)
     const request = await axios.put( `${URL}/${blog.id}`, {
         title: blog.title,
         author: blog.author,
