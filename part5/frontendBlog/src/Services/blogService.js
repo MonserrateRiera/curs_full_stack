@@ -20,6 +20,13 @@ const createBlog = async (newBlog, token) => {
     }
 }
 
+const addLike = async (Blog) => {
+    const request = await axios.put(URL, Blog);
+    if(request){
+        return request.data;
+    }
+}
+
 
 
 

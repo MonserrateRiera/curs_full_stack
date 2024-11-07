@@ -6,9 +6,9 @@ export const Blog = ({blogId, title, author, url, likes }) => {
     <div>
         <h4>{ title }</h4>
         <Togglable buttonLabel="View" cancelButton="Hide">
-            <span>Autor: { author }</span>
-            <span>Direccion web: { url }</span>
-            <span>Numero de likes: {likes} <button>Like!</button></span>
+            <p>Autor: { author }</p>
+            <p>Direccion web: <a href={{ url }}> Direccion web</a></p>
+            <p>Numero de likes: {likes} <button>Like!</button></p>
         </Togglable>
         
     </div>
