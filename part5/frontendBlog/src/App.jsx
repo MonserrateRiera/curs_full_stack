@@ -65,6 +65,11 @@ const createHandler = async (newBlog) => {
     console.log("Blog no valid")
   }
 }
+const likeHandler = async( blog ) =>{
+
+  const response  = await blogService.addLike( blog.id );
+}
+
 
   return (
     <>
@@ -84,7 +89,7 @@ const createHandler = async (newBlog) => {
       <h1>Llistat de blogs aqui</h1>
       {
         blogs ? blogs.map(blog => (
-          <Blog key={blog.id} id={blog.id} title={blog.title} author={blog.author} url={blog.url} likes={blog.likes} />
+          <Blog key={blog.id} {...blog} onLikeClick={likeHandler}/>
         ))
         :<h4>Theres no blogs to show</h4>
       }

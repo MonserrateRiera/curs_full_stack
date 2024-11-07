@@ -1,7 +1,20 @@
 import Togglable from "./Toggable";
 
 
-export const Blog = ({blogId, title, author, url, likes }) => {
+export const Blog = ({id, title, author, url, likes, user, onLikeClick }) => {
+
+
+  const likeHandler = () =>{
+    const blog = {
+      id,
+      title,
+      author,
+      likes,
+      user
+    };
+    onLikeClick(blog);
+  }
+
   return (
     <div>
         <h4>{ title }</h4>
