@@ -34,7 +34,16 @@ const addLike = async ( blog ) => {
     }
 }
 
-
+const removeBlog = async ( id, user ) =>{
+    const config = {
+        headers: {Authorization: `Bearer ${user.token}`}
+    }
+    console.log("Token ", config);
+    const request = await axios.delete( `${URL}/${id}`, config);
+    if(request){
+        return request.data;
+    }
+}
 
 
 
@@ -44,5 +53,6 @@ const addLike = async ( blog ) => {
 export default {
     getAll,
     createBlog,
-    addLike
+    addLike,
+    removeBlog
 }

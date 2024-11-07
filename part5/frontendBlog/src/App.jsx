@@ -19,8 +19,9 @@ useEffect(() => {
   const fetchBlogs = async () => {
     try {
       const blogsData = await blogService.getAll(); // Asume que blogService tiene un método getAll()
-      setBlogs(blogsData);
-      console.log(blogsData);
+      const sortedBlogs = [...blogsData].sort((a, b) => b.likes - a.likes);
+      setBlogs(sortedBlogs);
+      //setBlogs(sortedBlogs)
     } catch (error) {
       console.error('Error fetching blogs:', error);
     }
@@ -70,14 +71,28 @@ const createHandler = async (newBlog) => {
  * es contingut modificat des blog a nes metode update i es modificará.
  * @param {*} blog 
  */
-const likeHandler = async( blog ) =>{
-  console.log("Aquest es es blog que he de moficiar: ",blog)
-  blog.likes = blog.likes+1;
-  console.log("Aquest es es blog que he modificat: ",blog)
+const likeHandler = async( updatedBlog ) =>{
+  
+  updatedBlog.likes = updatedBlog.likes+1;
+  
 
-  const response  = await blogService.addLike( blog );
+  const response  = await blogService.addLike( updatedBlog );
+
+  setBlogs((prevBlogs) =>
+    prevBlogs.map((blog) =>
+      blog.id === updatedBlog.id ? updatedBlog : blog
+    ).sort((a, b) => b.likes - a.likes)
+  );
 }
-
+const deleteHandler = async ( deleteBlog ) =>{
+  
+  if(deleteBlog.user.username === user.username){
+    const response  = await blogService.removeBlog( deleteBlog.id, user);
+    setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== deleteBlog.id));
+  }else{
+    console.log("No pots borrar lo que no es teu!!!")
+  }
+}
 
   return (
     <>
@@ -97,7 +112,7 @@ const likeHandler = async( blog ) =>{
       <h1>Llistat de blogs aqui</h1>
       {
         blogs ? blogs.map(blog => (
-          <Blog key={blog.id} {...blog} onLikeClick={likeHandler}/>
+          <Blog key={blog.id} {...blog} onLikeClick={likeHandler} onDeleteClick={deleteHandler}/>
         ))
         :<h4>Theres no blogs to show</h4>
       }
