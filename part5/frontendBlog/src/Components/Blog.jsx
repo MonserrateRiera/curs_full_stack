@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Togglable from "./Toggable";
-
+import PropTypes from "prop-types";
 
 export const Blog = ({id, title, author, url, likes, user, onLikeClick, onDeleteClick }) => {
 
@@ -49,3 +49,14 @@ export const Blog = ({id, title, author, url, likes, user, onLikeClick, onDelete
 
 
 export default Blog;
+
+Blog.propTypes = {
+  id: PropTypes.string.isRequired, 
+  title: PropTypes.string.isRequired, 
+  author: PropTypes.string.isRequired, 
+  url: PropTypes.string.isRequired, 
+  likes : PropTypes.number.isRequired, 
+  user : PropTypes.object.isRequired, 
+  onLikeClick : PropTypes.func.isRequired, 
+  onDeleteClick: PropTypes.func.isRequired
+}
